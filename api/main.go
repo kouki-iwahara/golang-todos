@@ -3,16 +3,13 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/kouki-iwahara/golang-todos/api/controller"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "Hello, World")
-
-}
-
 func main() {
-	server := http.Server {
-		Addr:              ":8080",
+	server := http.Server{
+		Addr: ":8080",
 		// Handler:           nil,
 		// TLSConfig:         &tls.Config{},
 		// ReadTimeout:       0,
@@ -29,7 +26,7 @@ func main() {
 		// ConnContext: func(ctx context.Context, c net.Conn) context.Context {
 		// },
 	}
-	http.HandleFunc("/todos", handler)
+	http.HandleFunc("/todos", controller.HandleTodoRequest)
 	fmt.Println("server listening on port 8080")
 	server.ListenAndServe()
 }
