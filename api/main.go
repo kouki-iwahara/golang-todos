@@ -5,28 +5,20 @@ import (
 	"net/http"
 
 	"github.com/kouki-iwahara/golang-todos/api/controller"
+	"github.com/kouki-iwahara/golang-todos/api/models/repository"
 )
+
+// DI
+var todoRepository = repository.NewTodoRepository()
+var todoController = controller.NewTodoController(todoRepository)
+var todoRouter = controller.NewRouter(todoController)
 
 func main() {
 	server := http.Server{
 		Addr: ":8080",
-		// Handler:           nil,
-		// TLSConfig:         &tls.Config{},
-		// ReadTimeout:       0,
-		// ReadHeaderTimeout: 0,
-		// WriteTimeout:      0,
-		// IdleTimeout:       0,
-		// MaxHeaderBytes:    0,
-		// TLSNextProto:      map[string]func( *http.Server,  *tls.Conn,  http.Handler){},
-		// ConnState: func( net.Conn,  http.ConnState) {
-		// },
-		// ErrorLog: &log.Logger{},
-		// BaseContext: func( net.Listener) context.Context {
-		// },
-		// ConnContext: func(ctx context.Context, c net.Conn) context.Context {
-		// },
 	}
-	http.HandleFunc("/todos", controller.HandleTodoRequest)
+
+	http.HandleFunc("/todos", todoRouter.HandleTodoRequest)
 	fmt.Println("server listening on port 8080")
 	server.ListenAndServe()
 }

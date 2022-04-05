@@ -5,6 +5,7 @@ services:
     build:
       context: ./api
     tty: true
+    env_file: .env
     ports:
       - ${API_PORT}:8080
     volumes:
@@ -23,6 +24,7 @@ services:
       - ${DB_PORT}:3306
     volumes:
       - dbdata:/var/lib/mysql
+      - ./db/sql:/docker-entrypoint-initdb.d
     container_name: golang_todos_db
 
 volumes:

@@ -1,15 +1,27 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 )
 
-// type router struct {
-// 	tc TodoController
-// }
+type Router interface {
+	HandleTodoRequest(w http.ResponseWriter, r *http.Request)
+}
 
-func HandleTodoRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("listen on controller")
-	fmt.Fprintf(w, "Hello, World")
+type router struct {
+	tc TodoController
+}
+
+func (ro *router) HandleTodoRequest(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		ro.tc.GetTodos(w, r)
+	default:
+		w.WriteHeader(405)
+	}
+}
+
+// routerのコンストラクタ。TodoControllerを受け取りrouterのポインタを返却する
+func NewRouter(tc TodoController) Router {
+	return &router{tc}
 }

@@ -6,6 +6,10 @@ COPY ./go.mod ./
 
 RUN go mod download
 
+COPY . .
+
+RUN go install github.com/cosmtrek/air@latest
+
 EXPOSE 8080
 
-CMD ["go", "run", "main.go"]
+CMD ["air", "-c", ".air.toml"]
